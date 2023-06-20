@@ -4,15 +4,13 @@ from typing import Optional  # 型別註釋用於建立可選型別
 from fastapi.encoders import jsonable_encoder  # 用於將 Python 資料結構轉換為 JSON
 from fastapi.responses import JSONResponse  # 用於建立 JSON 回應
 import requests  # 用於建立 HTTP 請求
-import time  # 用於時間相關的操作
 
 app = FastAPI()  # 建立 FastAPI 應用實例
 
 # 定義全局變量
 flagForSymptoms: Optional[int] = 0
 flagForBasicInfo: Optional[int] = 0
-flagForRecords: Optional[int] = 1
-flagForClinic: Optional[int] = 1
+
 
 urlForChange = "https://for-api-32f276cf322d.herokuapp.com/changeFlag"  # API 的 URL
 
@@ -27,8 +25,7 @@ def post_for_change_flag(flag: FlagModel):
     # 透過全局變量的方式來改變旗標值
     global flagForSymptoms
     global flagForBasicInfo
-    global flagForRecords
-    global flagForClinic
+
 
     # 根據目標旗標的名稱來改變其值，然後返回"OK"
     if flag.target == "flagForSymptoms":
@@ -37,12 +34,7 @@ def post_for_change_flag(flag: FlagModel):
     elif flag.target == "flagForBasicInfo":
         flagForBasicInfo = flag.val
         return "OK"
-    elif flag.target == "flagForRecords":
-        flagForRecords = flag.val
-        return "OK"
-    elif flag.target == "flagForClinic":
-        flagForClinic = flag.val
-        return "OK"
+    
 
     return "fail"  # 如果無法匹配任何旗標名稱，則返回"fail"
 
@@ -50,8 +42,7 @@ def post_for_change_flag(flag: FlagModel):
 class AllFlagModel(BaseModel):
     flagForSymptoms: int
     flagForBasicInfo: int
-    flagForRecords: int
-    flagForClinic: int
+
 
 # 定義一個新的端點，該端點會一次更改所有旗標的值
 @app.post("/changeAllFlag")
@@ -59,13 +50,10 @@ def post_for_change_All_flag(flag: AllFlagModel):
     # 透過全局變量的方式來改變旗標值
     global flagForSymptoms
     global flagForBasicInfo
-    global flagForRecords
-    global flagForClinic
 
     flagForSymptoms = flag.flagForSymptoms
     flagForBasicInfo = flag.flagForBasicInfo
-    flagForRecords = flag.flagForRecords
-    flagForClinic = flag.flagForClinic
+
 
     return "OK"  # 更改成功後返回"OK"
 
@@ -131,7 +119,6 @@ class ClinicModel(BaseModel):
 @app.post("/forClinic")
 def post_for_clinic(clinic: ClinicModel):
     userid = clinic.userID  # 使用者 ID
-    flag = flagForClinic  # 獲取旗標值
 
     # 準備資料
     data = {"userid": userid}
@@ -146,7 +133,6 @@ class RecordsModel(BaseModel):
 @app.post("/records")
 def post_for_records(records: RecordsModel):
     userid = records.userID  # 使用者 ID
-    flag = flagForRecords  # 獲取旗標值
 
     # 準備資料
     data = {"userid": userid}

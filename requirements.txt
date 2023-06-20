@@ -1,11 +1,5 @@
-Click
 fastapi
-gunicorn
-h11
-httptools
 pydantic
-starlette
+requests
 uvicorn
-uvloop
-websockets
 requests
