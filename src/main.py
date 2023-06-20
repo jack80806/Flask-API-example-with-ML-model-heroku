@@ -85,7 +85,7 @@ def get_for_flag():
 
 @app.get("/basicInfo")
 def get_for_basic_info():
-    userid = "Ue1350bef1851afd418a9aa81e444eaa7"
+    userid = "Ucb952f1a00be8f43598a7ac8f449831a"
     flag = flagForBasicInfo
 
     # Prepare the data
